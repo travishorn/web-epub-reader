@@ -2,6 +2,8 @@
 
 Web-based book reader supporting .epub files
 
+⚠️ Warning: This project is in very early development.
+
 ## Installation
 
 Clone the repository
