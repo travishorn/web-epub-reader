@@ -66,10 +66,15 @@ export default {
   methods: {
     signUp() {
       if (this.passwordsMatch) {
-        this.$store.dispatch("signUp", {
-          email: this.email,
-          password: this.password
-        });
+        this.$store
+          .dispatch("signUp", {
+            email: this.email,
+            password: this.password
+          })
+          .then(() => {
+            // Need to show a success message
+            this.$router.push("/log-in");
+          });
       } else {
         console.log("Passwords do not match!");
       }

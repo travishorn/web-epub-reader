@@ -27,15 +27,19 @@ export default new Vuex.Store({
   },
   actions: {
     signUp(context, { email, password }) {
-      auth
-        .signup(email, password)
-        .then(res => {
-          console.log("User signed up.", res.created_at);
-          // Consider auto-signing in the user
-        })
-        .catch(err => {
-          console.log("Something went wrong while signing up.", err);
-        });
+      return new Promise((resolve, reject) => {
+        auth
+          .signup(email, password)
+          .then(res => {
+            console.log("User signed up.", res.created_at);
+            resolve();
+            // Consider auto-signing in the user
+          })
+          .catch(err => {
+            console.log("Something went wrong while signing up.", err);
+            reject();
+          });
+      });
     },
     logIn({ commit }, { email, password }) {
       return new Promise((resolve, reject) => {
