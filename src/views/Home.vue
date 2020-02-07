@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
-    <UserControl />
+    <user-control />
   </div>
 </template>
 

@@ -11,11 +11,16 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: auth.currentUser() ? auth.currentUser() : null
+    user: auth.currentUser() ? auth.currentUser() : null,
+    alert: {
+      type: "",
+      message: ""
+    }
   },
   getters: {
     loggedIn: state => state.user !== null,
-    userEmail: state => (state.user ? state.user.email : null)
+    userEmail: state => (state.user ? state.user.email : null),
+    alert: state => state.alert
   },
   mutations: {
     logIn(state, user) {
@@ -23,54 +28,74 @@ export default new Vuex.Store({
     },
     logOut(state) {
       state.user = null;
+    },
+    alert(state, alert) {
+      state.alert.type = alert.type;
+      state.alert.message = alert.message;
     }
   },
   actions: {
-    signUp(context, { email, password }) {
+    signUp({ dispatch }, { email, password }) {
       return new Promise((resolve, reject) => {
         auth
           .signup(email, password)
-          .then(res => {
-            console.log("User signed up.", res.created_at);
+          .then(() => {
+            dispatch("alert", {
+              type: "success",
+              message: "Your account has been created."
+            });
+
             resolve();
             // Consider auto-signing in the user
           })
-          .catch(err => {
-            console.log("Something went wrong while signing up.", err);
+          .catch(() => {
+            dispatch("alert", {
+              type: "danger",
+              message:
+                "Something went wrong while signing you up. Please try again later."
+            });
             reject();
           });
       });
     },
-    logIn({ commit }, { email, password }) {
+    logIn({ commit, dispatch }, { email, password }) {
       return new Promise((resolve, reject) => {
         auth
           .login(email, password, true)
-          .then(res => {
-            console.log("User logged in", res);
+          .then(() => {
             commit("logIn", auth.currentUser());
             resolve();
           })
           .catch(err => {
-            console.log("Something went wrong while logging in.", err);
+            dispatch("alert", {
+              type: "danger",
+              message: err.json.error_description
+            });
             reject();
           });
       });
     },
-    logOut({ commit }) {
+    logOut({ commit, dispatch }) {
       return new Promise((resolve, reject) => {
         auth
           .currentUser()
           .logout()
           .then(() => {
-            console.log("User logged out.");
             commit("logOut");
             resolve();
           })
-          .catch(err => {
-            console.log("Failed to log out.", err);
+          .catch(() => {
+            dispatch("alert", {
+              type: "danger",
+              message:
+                "Something went wrong while logging you out. Please try again later."
+            });
             reject();
           });
       });
+    },
+    alert({ commit }, alert) {
+      commit("alert", alert);
     }
   }
 });

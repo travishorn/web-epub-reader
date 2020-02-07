@@ -76,7 +76,10 @@ export default {
             this.$router.push("/log-in");
           });
       } else {
-        console.log("Passwords do not match!");
+        this.$store.dispatch("alert", {
+          type: "warning",
+          message: "Passwords do not match!"
+        });
       }
     }
   }
