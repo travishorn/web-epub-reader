@@ -45,16 +45,21 @@ export default new Vuex.Store({
               message: "Your account has been created."
             });
 
-            resolve();
-            // Consider auto-signing in the user
+            dispatch("logIn", { email, password })
+              .then(res => {
+                resolve(res);
+              })
+              .catch(err => {
+                reject(err);
+              });
           })
-          .catch(() => {
+          .catch(err => {
             dispatch("alert", {
               type: "danger",
               message:
                 "Something went wrong while signing you up. Please try again later."
             });
-            reject();
+            reject(err);
           });
       });
     },
