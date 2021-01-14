@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import GoTrue from "gotrue-js";
 
 const auth = new GoTrue({
-  APIUrl: "https://web-epub-reader-8cde3e.netlify.com/.netlify/identity",
+  APIUrl: "https://web-epub-reader-8cde3e.netlify.app/.netlify/identity",
   setCookie: true
 });
 
